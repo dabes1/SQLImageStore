@@ -76,9 +76,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Default.aspx" />
+    <Content Include="Scripts\Default.js" />
     <Content Include="Web.config" />
+    <Content Include="WebServices\DatabaseServices.asmx" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClassLibrary\FileObj.cs" />
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -87,11 +90,13 @@
       <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WebServices\DatabaseServices.asmx.cs">
+      <DependentUpon>DatabaseServices.asmx</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="ClassLibrary\" />
     <Folder Include="Pages\" />
-    <Folder Include="WebServices\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
