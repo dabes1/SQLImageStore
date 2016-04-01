@@ -68,15 +68,24 @@ var loadMIfilename = function () {
 var LoadToMIDB = function () {
     var fileObj = new Object;
 
+    fileObj.ReferrerID = 0; // default to new
+    if (document.getElementById('miReferrerID').value != "" && document.getElementById('miReferrerID').value != undefined)
+        fileObj.ReferrerID = document.getElementById('miReferrerID').value;
+
     fileObj.Organization = document.getElementById('miOrganization').value;
-    fileObj.Verbiage = document.getElementById('miVerbiage').value;
     fileObj.Email = document.getElementById('miEmail').value;
     fileObj.Contact = document.getElementById('miContact').value;
-    fileObj.CampaignDescription = document.getElementById('miCampaignDesc').value;
 
+    fileObj.ReferrerCampaignID = 0;
+    if (document.getElementById('miCampaignID').value != "" && document.getElementById('miCampaignID').value != undefined)
+        fileObj.ReferrerCampaignID = document.getElementById('miCampaignID').value;
 
-    fileObj.ImgPath = document.getElementById('miInput1').value;
     fileObj.ImgFile = document.getElementById('miInput1').files[0].name;
+    fileObj.ImgPath = document.getElementById('miTxt1').value;
+    fileObj.CampaignDescription = document.getElementById('miCampaignDesc').value;
+    fileObj.Verbiage = document.getElementById('miVerbiage').value;
+
+
 
     ImageApplication.WebServices.DatabaseServices.LoadToMIDB(fileObj, LoadToMIDBCallbackSuccess);
 };

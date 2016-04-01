@@ -1,5 +1,45 @@
 ﻿
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*************************************************************************************************/
+/*************************************************************************************************/
+/*************************************************************************************************/
+
+-- Merchant Intake SQL Infrastructures
+
+/* RECREATED *****/
+CREATE TABLE tblMerchantIntakeInquiries (
+	ID							INT IDENTITY(1, 1) NOT NULL, 
+	ReferrerID					INT,
+	ReferrerCampaignID			INT, 
+	FirstName					NVARCHAR(50), 
+	LastName					NVARCHAR(50), 
+	BusinessName				NVARCHAR(100), 
+	Country						NVARCHAR(100), 
+	WebsiteURL					NVARCHAR(100), 
+	Email						NVARCHAR(100), 
+	Phone						NVARCHAR(15), 
+	BusinessType				NVARCHAR(100), 
+	Other						NVARCHAR(100), 
+	Product_ServiceOffered		NVARCHAR(1000), 
+	YearsInBusiness				INT, 
+	MonthlyVolume				NVARCHAR(50), 
+	StatementFileAWSID			NVARCHAR(250), 
+	SubmittedDate				DATETIME
+)  
+   
 /* RECREATED *****/
 CREATE TABLE tblMerchantIntakeReferrer (
 	ID				INT IDENTITY(1,1) NOT NULL, 
@@ -36,22 +76,22 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE PROCEDURE [dbo].[proc_MerchantIntakeReferrerGet]
+ALTER PROCEDURE [dbo].[proc_MerchantIntakeReferrerGet]
 (
-	@ReferrerID	INT,
-	@CampaignID	INT = 0
+	@ReferrerID			INT,
+	@ReferrerCampaignID	INT = 0
 )
 AS
 	SELECT 
-		miC.Verbiage,
-		miC.CampaignImage,
-		miC.CampaignImageDirPath,
 		miR.Organization,
 		miR.Email AS 'OrganizationContactEmail',
-		miR.ContactName,
-		miC.CampaignDescription
+		miR.ContactName,		
+		miC.CampaignImage,
+		miC.CampaignImageDirPath,
+		miC.CampaignDescription,
+		miC.Verbiage
 	FROM tblMerchantIntakeCampaign miC JOIN tblMerchantIntakeReferrer miR ON miC.ReferrerID = miR.ID
-	WHERE miC.ReferrerCampaignID = @CampaignID and miC.ReferrerID = @ReferrerID
+	WHERE miC.ReferrerCampaignID = @ReferrerCampaignID and miC.ReferrerID = @ReferrerID
 
 RETURN;
 
@@ -66,7 +106,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE PROCEDURE [dbo].[proc_MerchantIntakeReferrerOrganizationSave]
+ALTER PROCEDURE [dbo].[proc_MerchantIntakeReferrerOrganizationSave]
 (
 	@ReferrerID				INT,					-- 0 indicates a new referrer org entry, anything else means UPDATE
 	@Organization			NVARCHAR(200) = NULL,
@@ -86,7 +126,7 @@ AS
 		@TmpID		INT = 0,
 		@RC			INT = 0;
 
-BEGIN TRANSACTION
+	BEGIN TRANSACTION
 
 	IF (@ReferrerID = 0)		-- NEW ENTRY
 	BEGIN
@@ -109,7 +149,15 @@ BEGIN TRANSACTION
 		INSERT INTO tblMerchantIntakeCampaign
 			( ReferrerID, ReferrerCampaignID, CampaignImage, CampaignImageDirPath, CampaignDescription,	Verbiage, Active)
 		VALUES
-			(	 @oRefID,					1,		   NULL,				 NULL,				  NULL,		NULL, 1)			
+			(	 @oRefID,					0,		   NULL,				 NULL,				  NULL,		NULL, 1)			
+		SET @RC = @@ERROR;
+		
+		IF (@RC != 0)	-- There was an error with the update
+		BEGIN
+			-- ERROR
+			ROLLBACK TRANSACTION;
+			RETURN;
+		END			
 		
 		IF (@ReferrerCampaignID > 0)
 		BEGIN
@@ -117,9 +165,17 @@ BEGIN TRANSACTION
 				( ReferrerID,  ReferrerCampaignID,					CampaignImage,					CampaignImageDirPath,				   CampaignDescription,					 Verbiage, Active)
 			VALUES
 				(	 @oRefID, @ReferrerCampaignID, COALESCE(@CampaignImage, NULL), COALESCE(@CampaignImageDirPath, NULL), COALESCE(@CampaignDescription, NULL), COALESCE(@Verbiage, NULL),		1)
+			SET @RC = @@ERROR;
+			
+			IF (@RC != 0)	-- There was an error with the update
+			BEGIN
+				-- ERROR
+				ROLLBACK TRANSACTION;
+				RETURN;
+			END							
 		END
-	END
-	ELSE
+	END	
+	ELSE  -- else, there's a value in @ReferrerID
 	BEGIN	
 		IF NOT EXISTS(SELECT * FROM tblMerchantIntakeReferrer WHERE ID = @ReferrerID)
 		BEGIN
@@ -148,36 +204,49 @@ BEGIN TRANSACTION
 		
 		IF (@ReferrerCampaignID > 0)	-- update to the campaign
 		BEGIN
+			-- Is it a new campaign??
 			IF NOT EXISTS(SELECT * FROM tblMerchantIntakeCampaign WHERE ReferrerID = @ReferrerID AND ReferrerCampaignID = @ReferrerCampaignID)
+			-- YES, it doesn't exist so it's a new campaign
 			BEGIN
-				-- ERROR
-				ROLLBACK TRANSACTION;
-				RETURN;
+				INSERT INTO tblMerchantIntakeCampaign
+					( ReferrerID,  ReferrerCampaignID,					CampaignImage,					CampaignImageDirPath,				   CampaignDescription,					 Verbiage, Active)
+				VALUES
+					(	 @oRefID, @ReferrerCampaignID, COALESCE(@CampaignImage, NULL), COALESCE(@CampaignImageDirPath, NULL), COALESCE(@CampaignDescription, NULL), COALESCE(@Verbiage, NULL),		1)			
+				SET @RC = @@ERROR;
+				
+				IF (@RC != 0)	-- There was an error with the update
+				BEGIN
+					-- ERROR
+					ROLLBACK TRANSACTION;
+					RETURN;
+				END								
+			END
+			-- otherwise it's not a new campaign and we are updating the campaign
+			ELSE
+			BEGIN
+				IF (@CampaignImage IS NOT NULL) OR (@CampaignImageDirPath IS NOT NULL) OR (@CampaignDescription IS NOT NULL) OR (@Verbiage IS NOT NULL)
+				BEGIN
+					UPDATE tblMerchantIntakeCampaign SET
+						CampaignImage = COALESCE(@CampaignImage, CampaignImage),
+						CampaignImageDirPath = COALESCE(@CampaignImageDirPath, CampaignImageDirPath),
+						CampaignDescription = COALESCE(@CampaignDescription, CampaignDescription),
+						Verbiage = COALESCE(@Verbiage, Verbiage)
+					WHERE
+						ReferrerID = @ReferrerID
+						AND ReferrerCampaignID = @ReferrerCampaignID
+				END
+				SET @RC = @@ERROR;
+				
+				IF (@RC != 0)	-- There was an error with the update
+				BEGIN
+					-- ERROR
+					ROLLBACK TRANSACTION;
+					RETURN;
+				END			
 			END
 		END
-		
-		IF (@CampaignImage IS NOT NULL) OR (@CampaignImageDirPath IS NOT NULL) OR (@CampaignDescription IS NOT NULL) OR (@Verbiage IS NOT NULL)
-		BEGIN
-			UPDATE tblMerchantIntakeCampaign SET
-				CampaignImage = COALESCE(@CampaignImage, CampaignImage),
-				CampaignImageDirPath = COALESCE(@CampaignImageDirPath, CampaignImageDirPath),
-				CampaignDescription = COALESCE(@CampaignDescription, CampaignDescription),
-				Verbiage = COALESCE(@Verbiage, Verbiage)
-			WHERE
-				ReferrerID = @ReferrerID
-				AND ReferrerCampaignID = @ReferrerCampaignID
-		END
-		SET @RC = @@ERROR;
-		
-		IF (@RC != 0)	-- There was an error with the update
-		BEGIN
-			-- ERROR
-			ROLLBACK TRANSACTION;
-			RETURN;
-		END				
 	END
 	
-COMMIT TRAN;
+	COMMIT TRAN;
 
 RETURN;
-

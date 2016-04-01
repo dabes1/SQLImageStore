@@ -47,12 +47,12 @@
             <h3>Load the MI Stuff</h3>
 
             <div>
+                <div>Referrer ID (blank indicates new):
+                    <input type="text" id="miReferrerID" style="width:50px" />
+                </div>
 
                 <div>Organization:
                     <input type="text" id="miOrganization" style="width: 300px;" />
-                </div>
-                <div>Verbiage:
-                    <input type="text" id="miVerbiage" style="height:100px; width: 300px;" />
                 </div>
                 <div>Email:
                     <input type="text" id="miEmail" style="width: 300px;" />
@@ -60,15 +60,25 @@
                 <div>Org Contact:
                     <input type="text" id="miContact" style="width: 300px;" />
                 </div>
+
+                <div>&nbsp;</div>
+                <hr />
+
+                <div>Campaign ID:
+                    <input type="text" id="miCampaignID" style="width:50px" />
+                </div>
+                <div>Image load
+                    <input type="file" id="miInput1" onchange="loadMIfilename()"/>         
+                </div>
+                <div>ImagePath:
+                    <input type="text" id="miTxt1" style="width:300px;" />
+                </div>
                 <div>Campaign Desc:
                     <input type="text" id="miCampaignDesc" style="height:100px; width:300px" />
                 </div>
-
-                <h3>Please select an Image to load</h3>
-                <div>
-                    <input type="file" id="miInput1" onchange="loadMIfilename()"/>         
+                <div>Verbiage:
+                    <input type="text" id="miVerbiage" style="height:100px; width: 300px;" />
                 </div>
-                <input type="text" id="miTxt1" style="width:300px;" />
             </div>
 
             <div>
