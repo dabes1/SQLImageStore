@@ -104,9 +104,53 @@ RETURN
                 <input type="text" id="txtImgID" />
                 <input type="button" id="btnBtnDisplay" value="Display" onclick="displayImage()" />
             </div>
-            <img id="imgArea" src="" />
+            <img id="imgArea" src="" style="height:150px; width:580px;" />
         </div>
 
+
+        <div>
+            <h3>Load the MI Stuff</h3>
+
+            <div>
+
+                <div>Organization:
+                    <input type="text" id="miOrganization" style="width: 300px;" />
+                </div>
+                <div>Verbiage:
+                    <input type="text" id="miVerbiage" style="height:100px; width: 300px;" />
+                </div>
+                <div>Email:
+                    <input type="text" id="miEmail" style="width: 300px;" />
+                </div>
+                <div>Org Contact:
+                    <input type="text" id="miContact" style="width: 300px;" />
+                </div>
+                <div>Campaign Desc:
+                    <input type="text" id="miCampaignDesc" style="height:100px; width:300px" />
+                </div>
+
+                <h3>Please select an Image to load</h3>
+                <div>
+                    <input type="file" id="miInput1" onchange="loadMIfilename()"/>         
+                </div>
+                <input type="text" id="miTxt1" style="width:300px;" />
+            </div>
+
+            <div>
+                <input type="button" id="btn2" value="MI Load" onclick="LoadToMIDB()" />
+            </div>
+
+            <h3>Returned ID's on successful load</h3>
+            <div>
+                <div>ReferrerID:
+                    <input type="text" id="miOutRefID" />
+                </div>
+                <div>CampaignID:
+                    <input type="text" id="miOutCmpID" />
+                </div>
+
+            </div>
+        </div>
     </div>
     </form>
 </body>

@@ -40,7 +40,7 @@ var displayImage = function () {
 };
 
 function ExtractFromDBCallbackSuccess(result) {
-    var pic = new Image(100, 100);
+    var pic = new Image(150, 580);
     pic.src = result;
 
     var imgArea = document.getElementById("imgArea");
@@ -51,4 +51,39 @@ function ExtractFromDBCallbackSuccess(result) {
     //$("#imgArea").attr("src", pic);
 }
 
+
+
+
+var loadMIfilename = function () {
+    var eleFile = document.getElementById('miInput1');
+
+    var selectedPath = eleFile.value;
+    var selectedFile = eleFile.files[0];
+
+    document.getElementById('miTxt1').value = selectedPath;
+
+}
+
+
+var LoadToMIDB = function () {
+    var fileObj = new Object;
+
+    fileObj.Organization = document.getElementById('miOrganization').value;
+    fileObj.Verbiage = document.getElementById('miVerbiage').value;
+    fileObj.Email = document.getElementById('miEmail').value;
+    fileObj.Contact = document.getElementById('miContact').value;
+    fileObj.CampaignDescription = document.getElementById('miCampaignDesc').value;
+
+
+    fileObj.ImgPath = document.getElementById('miInput1').value;
+    fileObj.ImgFile = document.getElementById('miInput1').files[0].name;
+
+    ImageApplication.WebServices.DatabaseServices.LoadToMIDB(fileObj, LoadToMIDBCallbackSuccess);
+};
+
+function LoadToMIDBCallbackSuccess(result) {
+    document.getElementById('miOutRefID').value = result.oReferrerID;
+    document.getElementById('miOutCmpID').value = result.oCampaignID;
+    alert("MI Load Successful");
+}
 

@@ -125,5 +125,63 @@ namespace ImageApplication.WebServices
         }
 
 
+
+        [WebMethod]
+        public MIFileObj LoadToMIDB(MIFileObj inObj)
+        {
+            byte[] imgData = null;
+
+            FileInfo fInfo = new FileInfo(inObj.ImgPath);
+            long numBytes = fInfo.Length;
+            FileStream fStream = new FileStream(inObj.ImgPath, FileMode.Open, FileAccess.Read);
+            BinaryReader bRdr = new BinaryReader(fStream);
+            imgData = bRdr.ReadBytes((int)numBytes);
+
+            string conStr = ConfigurationManager.ConnectionStrings["SiteSqlServer"].ToString();
+            using (SqlConnection con = new SqlConnection(conStr))
+            {
+                try
+                {
+                    con.Open();
+                    using (SqlCommand cmd = new SqlCommand())
+                    {
+                        cmd.Connection = con;
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.CommandText = "proc_MerchantIntakeReferrerOrganizationSave";
+
+
+                        cmd.Parameters.AddWithValue("@inOrganization", inObj.Organization);
+                        cmd.Parameters.AddWithValue("@inVergiage", inObj.Verbiage);
+                        cmd.Parameters.AddWithValue("@inEmail", inObj.Email);
+                        cmd.Parameters.AddWithValue("@inContact", inObj.Contact);
+                        cmd.Parameters.AddWithValue("@inCampaignDesc", inObj.CampaignDescription);
+                        cmd.Parameters.AddWithValue("@inImage", imgData);
+
+                        cmd.Parameters.Add("@oRefID", SqlDbType.Int).Direction = System.Data.ParameterDirection.Output;
+                        cmd.Parameters.Add("@oCmpID", SqlDbType.Int).Direction = System.Data.ParameterDirection.Output;
+
+                        try
+                        {
+                            cmd.ExecuteNonQuery();
+                            inObj.oReferrerID = Convert.ToInt32(cmd.Parameters["@oRefID"].Value);
+                            inObj.oCampaignID = Convert.ToInt32(cmd.Parameters["@oCmpID"].Value);
+                        }
+                        catch (Exception e)
+                        {
+                            return null ;
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    return null;
+                }
+            }
+
+
+
+            return inObj;
+        }
+
     }
 }
