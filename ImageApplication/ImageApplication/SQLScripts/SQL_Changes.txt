@@ -1,0 +1,56 @@
+﻿
+
+/* RECREATED *****/
+CREATE TABLE tblMerchantIntakeReferrer (
+	ID				INT IDENTITY(1,1) NOT NULL, 
+	Organization	NVARCHAR(200), 
+	Email			NVARCHAR(100), 
+	ContactName		NVARCHAR(100), 
+	Active			TINYINT
+ )
+ 
+  
+/* RECREATED *****/
+CREATE TABLE tblMerchantIntakeCampaign (
+	ID						INT IDENTITY(1,1) NOT NULL, 
+	ReferrerID				INT,
+	ReferrerCampaignID		INT,  -- the Referrer's external campaign ID
+	CampaignImage			IMAGE,
+	CampaignImageDirPath	NVARCHAR(200), 
+	CampaignDescription		NVARCHAR(1000), 
+	Verbiage				NVARCHAR(1000), 
+	Active					TINYINT 
+)
+
+
+
+
+
+/* RECREATED *****/
+-- This one retrieves the Referring organization's info.
+USE [appsosdev]
+GO
+/****** Object:  StoredProcedure [dbo].[proc_MerchantIntakeReferrerGet]    Script Date: 03/30/2016 11:55:06 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[proc_MerchantIntakeReferrerGet]
+(
+	@ReferrerID	INT,
+	@CampaignID	INT = 0
+)
+AS
+	SELECT 
+		miC.Verbiage,
+		miC.CampaignImage,
+		miC.CampaignImageDirPath,
+		miR.Organization,
+		miR.Email AS 'OrganizationContactEmail',
+		miR.ContactName,
+		miC.CampaignDescription
+	FROM tblMerchantIntakeCampaign miC JOIN tblMerchantIntakeReferrer miR ON miC.ReferrerID = miR.ID
+	WHERE miC.ReferrerCampaignID = @CampaignID and miC.ReferrerID = @ReferrerID
+
+RETURN;
