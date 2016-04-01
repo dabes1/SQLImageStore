@@ -54,3 +54,130 @@ AS
 	WHERE miC.ReferrerCampaignID = @CampaignID and miC.ReferrerID = @ReferrerID
 
 RETURN;
+
+
+
+/* RECREATED *****/
+USE [appsosdev]
+GO
+/****** Object:  StoredProcedure [dbo].[sp_MerchantIntakeReferrerOrganizationSave]    Script Date: 03/30/2016 11:55:06 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[proc_MerchantIntakeReferrerOrganizationSave]
+(
+	@ReferrerID				INT,					-- 0 indicates a new referrer org entry, anything else means UPDATE
+	@Organization			NVARCHAR(200) = NULL,
+	@Email					NVARCHAR(100) = NULL,
+	@ContactName			NVARCHAR(100) = NULL,
+	
+	@ReferrerCampaignID		INT = 0,				-- 0 = no campaign to insert/udpate
+	@CampaignImage			IMAGE = NULL,			-- CampaignImage and CampaignImageDirPath should come in together
+	@CampaignImageDirPath	NVARCHAR(200) = NULL,	-- CampaignImageDirPath and CampaignImage should come in together
+	@CampaignDescription	NVARCHAR(1000) = NULL,
+	@Verbiage				NVARCHAR(1000) = NULL,
+	
+	@oRefID					INT = 0 OUTPUT
+)
+AS
+	DECLARE
+		@TmpID		INT = 0,
+		@RC			INT = 0;
+
+BEGIN TRANSACTION
+
+	IF (@ReferrerID = 0)		-- NEW ENTRY
+	BEGIN
+		INSERT INTO tblMerchantIntakeReferrer
+		(
+			Organization,
+			Email,
+			ContactName,
+			Active
+		)
+		VALUES
+		(
+			@Organization,
+			@Email,
+			@ContactName,
+			1
+		) 
+		SET @oRefID = @@IDENTITY;
+
+		INSERT INTO tblMerchantIntakeCampaign
+			( ReferrerID, ReferrerCampaignID, CampaignImage, CampaignImageDirPath, CampaignDescription,	Verbiage, Active)
+		VALUES
+			(	 @oRefID,					1,		   NULL,				 NULL,				  NULL,		NULL, 1)			
+		
+		IF (@ReferrerCampaignID > 0)
+		BEGIN
+			INSERT INTO tblMerchantIntakeCampaign
+				( ReferrerID,  ReferrerCampaignID,					CampaignImage,					CampaignImageDirPath,				   CampaignDescription,					 Verbiage, Active)
+			VALUES
+				(	 @oRefID, @ReferrerCampaignID, COALESCE(@CampaignImage, NULL), COALESCE(@CampaignImageDirPath, NULL), COALESCE(@CampaignDescription, NULL), COALESCE(@Verbiage, NULL),		1)
+		END
+	END
+	ELSE
+	BEGIN	
+		IF NOT EXISTS(SELECT * FROM tblMerchantIntakeReferrer WHERE ID = @ReferrerID)
+		BEGIN
+			-- ERROR
+			ROLLBACK TRANSACTION;
+			RETURN;
+		END
+
+		IF (@Organization IS NOT NULL) OR (@Email IS NOT NULL) OR (@ContactName IS NOT NULL) -- there's an update to the referrer org entry
+		BEGIN
+			UPDATE tblMerchantIntakeReferrer SET
+				Organization = COALESCE(@Organization, Organization),
+				Email = COALESCE(@Email, Email),
+				ContactName = COALESCE(@ContactName, ContactName)
+			WHERE
+				ID = @ReferrerID;
+			SET @RC = @@ERROR;
+			
+			IF (@RC != 0)	-- There was an error with the update
+			BEGIN
+				-- ERROR
+				ROLLBACK TRANSACTION;
+				RETURN;
+			END
+		END
+		
+		IF (@ReferrerCampaignID > 0)	-- update to the campaign
+		BEGIN
+			IF NOT EXISTS(SELECT * FROM tblMerchantIntakeCampaign WHERE ReferrerID = @ReferrerID AND ReferrerCampaignID = @ReferrerCampaignID)
+			BEGIN
+				-- ERROR
+				ROLLBACK TRANSACTION;
+				RETURN;
+			END
+		END
+		
+		IF (@CampaignImage IS NOT NULL) OR (@CampaignImageDirPath IS NOT NULL) OR (@CampaignDescription IS NOT NULL) OR (@Verbiage IS NOT NULL)
+		BEGIN
+			UPDATE tblMerchantIntakeCampaign SET
+				CampaignImage = COALESCE(@CampaignImage, CampaignImage),
+				CampaignImageDirPath = COALESCE(@CampaignImageDirPath, CampaignImageDirPath),
+				CampaignDescription = COALESCE(@CampaignDescription, CampaignDescription),
+				Verbiage = COALESCE(@Verbiage, Verbiage)
+			WHERE
+				ReferrerID = @ReferrerID
+				AND ReferrerCampaignID = @ReferrerCampaignID
+		END
+		SET @RC = @@ERROR;
+		
+		IF (@RC != 0)	-- There was an error with the update
+		BEGIN
+			-- ERROR
+			ROLLBACK TRANSACTION;
+			RETURN;
+		END				
+	END
+	
+COMMIT TRAN;
+
+RETURN;
+
