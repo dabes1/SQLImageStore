@@ -31,10 +31,6 @@ function LoadDBCallbackSuccess(result) {
 
 var displayImage = function () {
     var imgID = document.getElementById("txtImgID").value;
-//    var imgID = $('#txtImgID')[0].value;
-//    var imgID = $('#txtImgID').value;
-//    var imgID = $("#txtImgID").value;
-//    var imgID = $("#txtImgID")[0].value;
 
     ImageApplication.WebServices.DatabaseServices.ExtractFromDB(imgID, ExtractFromDBCallbackSuccess);
 };
@@ -45,10 +41,10 @@ function ExtractFromDBCallbackSuccess(result) {
 
     var imgArea = document.getElementById("imgArea");
     imgArea.src = "data:image/png;base64," + result;
-    //imgArea.src = pic.src;
+    // other examples
+    //imgArea.src = "data:image/jpg;base64,"
+    //imgArea.src = "data:image/gif;base64,"
 
-
-    //$("#imgArea").attr("src", pic);
 }
 
 

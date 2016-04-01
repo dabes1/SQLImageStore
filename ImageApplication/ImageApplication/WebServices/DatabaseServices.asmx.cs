@@ -131,11 +131,11 @@ namespace ImageApplication.WebServices
         {
             byte[] imgData = null;
 
-            FileInfo fInfo = new FileInfo(inObj.ImgPath);
-            long numBytes = fInfo.Length;
-            FileStream fStream = new FileStream(inObj.ImgPath, FileMode.Open, FileAccess.Read);
-            BinaryReader bRdr = new BinaryReader(fStream);
-            imgData = bRdr.ReadBytes((int)numBytes);
+FileInfo fInfo = new FileInfo(inObj.ImgPath);
+long numBytes = fInfo.Length;
+FileStream fStream = new FileStream(inObj.ImgPath, FileMode.Open, FileAccess.Read);
+BinaryReader bRdr = new BinaryReader(fStream);
+imgData = bRdr.ReadBytes((int)numBytes);
 
             string conStr = ConfigurationManager.ConnectionStrings["SiteSqlServer"].ToString();
             using (SqlConnection con = new SqlConnection(conStr))
