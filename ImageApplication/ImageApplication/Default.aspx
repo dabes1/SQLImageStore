@@ -82,6 +82,18 @@
             </div>
 
             <div>
+                <div>APPS Sales Agent:
+                    <input type="text" id="miSalesAgent" style="width: 300px;" />
+                </div>
+
+                <div>APPS Sales Agent Email:
+                    <input type="text" id="miSalesAgenEmail" style="width: 300px;" />
+                </div>
+
+            </div>
+
+
+            <div>
                 <input type="button" id="btn2" value="MI Load" onclick="LoadToMIDB()" />
             </div>
 

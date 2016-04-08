@@ -18,6 +18,9 @@ namespace ImgApp.Objects
         public string CampaignDescription { get; set; }
         public string Verbiage { get; set; }
 
+        public string APPSalesAgentName { get; set; }
+        public string APPSalesAgentEmail { get; set; }
+
 
         public int oReferrerID { get; set; }
         public int oCampaignID { get; set; }

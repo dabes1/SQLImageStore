@@ -81,7 +81,8 @@ var LoadToMIDB = function () {
     fileObj.CampaignDescription = document.getElementById('miCampaignDesc').value;
     fileObj.Verbiage = document.getElementById('miVerbiage').value;
 
-
+    fileObj.APPSalesAgentName = document.getElementById('miSalesAgent').value;
+    fileObj.APPSalesAgentEmail = document.getElementById('miSalesAgenEmail').value;
 
     ImageApplication.WebServices.DatabaseServices.LoadToMIDB(fileObj, LoadToMIDBCallbackSuccess);
 };
