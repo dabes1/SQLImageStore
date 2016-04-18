@@ -63,8 +63,9 @@
                 <div>&nbsp;</div>
                 <hr />
 
-                <div>Campaign ID:
+                <div>Campaign ID (DO NOT ENTER 0):
                     <input type="text" id="miCampaignID" style="width:50px" />
+                    
                 </div>
                 <div>Image load
                     <input type="file" id="miInput1" onchange="loadMIfilename()"/>         
