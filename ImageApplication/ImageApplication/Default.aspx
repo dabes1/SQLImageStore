@@ -63,7 +63,7 @@
                 <div>&nbsp;</div>
                 <hr />
 
-                <div>Campaign ID (DO NOT ENTER 0):
+                <div>Campaign ID (DO NOT ENTER 0 AND DO NOT LEAVE BLANK):
                     <input type="text" id="miCampaignID" style="width:50px" />
                     
                 </div>
@@ -74,10 +74,10 @@
                     <input type="text" id="miTxt1" style="width:300px;" />
                 </div>
                 <div>Campaign Desc:
-                    <input type="text" id="miCampaignDesc" style="height:100px; width:300px" />
+                    <input type="text" id="miCampaignDesc" style="height:25px; width:1457px" />
                 </div>
                 <div>Verbiage:
-                    <input type="text" id="miVerbiage" style="height:100px; width: 300px;" />
+                    <input type="text" id="miVerbiage" style="height:25px; width: 1500px;" />
                 </div>
             </div>
 
