@@ -41,6 +41,9 @@
             <img id="imgArea" src="" style="height:150px; width:580px;" />
         </div>
 
+        <hr />
+        <hr />
+        <hr />
 
         <div>
             <h3>Load the MI Stuff</h3>
@@ -108,6 +111,45 @@
 
             </div>
         </div>
+
+
+        <div>&nbsp;</div>
+        <div>&nbsp;</div>
+
+        <hr />
+        <hr />
+        <hr />
+
+        <div>&nbsp;</div>
+        <div>&nbsp;</div>
+
+
+        <div>
+            <h3>Update the MI Stuff</h3>
+            <div>
+                Inquiry ID
+                <input type="text" id="txtUpdInqID" style="height:25px; width:50px;" />
+                Referrer ID
+                <input type="text" id="txtUpdRefID" style="height:25px; width:50px;" />
+                Campaign ID
+                <input type="text" id="txtUpdCmpID" style="height:25px; width:50px;" />
+            </div>
+
+            <div>Organization:
+                <div id="lblCurOrg">Current Organization</div>
+                <input type="text" id="miUpdOrganization" style="width: 300px;" />
+            </div>
+            <div>Email:
+                <div id="lblCurEmail">Current Email</div>
+                <input type="text" id="miUpdEmail" style="width: 300px;" />
+            </div>
+            <div>Org Contact:
+                <div id="lblCurContact">Current Organization Contact</div>
+                <input type="text" id="miUpdContact" style="width: 300px;" />
+            </div>
+
+        </div>
+
     </div>
     </form>
 </body>
