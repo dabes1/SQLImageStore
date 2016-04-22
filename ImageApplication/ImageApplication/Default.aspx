@@ -123,31 +123,101 @@
         <div>&nbsp;</div>
         <div>&nbsp;</div>
 
-
         <div>
             <h3>Update the MI Stuff</h3>
-            <div>
+            <div style="margin-bottom:50px;">
                 Inquiry ID
                 <input type="text" id="txtUpdInqID" style="height:25px; width:50px;" />
                 Referrer ID
                 <input type="text" id="txtUpdRefID" style="height:25px; width:50px;" />
                 Campaign ID
                 <input type="text" id="txtUpdCmpID" style="height:25px; width:50px;" />
+                <input type="button" id="btnLoad" style="height:25px; width:100px" value="Load Current" />
             </div>
-
-            <div>Organization:
-                <div id="lblCurOrg">Current Organization</div>
-                <input type="text" id="miUpdOrganization" style="width: 300px;" />
+        <div>&nbsp;</div>
+            <div><strong>Organization:</strong>
+                <div id="lblCurOrg">
+                    Current Organization                
+                    <input type="text" id="miCurOrganization" style="width: 300px;"/>
+                </div>
+                <div id="lblUpdOrg">
+                    Updated Organization                
+                    <input type="text" id="miUpdOrganization" style="width: 300px;" />
+                </div>
             </div>
-            <div>Email:
-                <div id="lblCurEmail">Current Email</div>
-                <input type="text" id="miUpdEmail" style="width: 300px;" />
+        <div>&nbsp;</div>
+            <div><strong>Email:</strong>
+                <div id="lblCurEmail">
+                    Current Email
+                    <input type="text" id="miCurEmail" style="width: 300px;" />
+                </div>
+                <div id="lblUpdEmail">
+                    Updated Email
+                    <input type="text" id="miUpdEmail" style="width: 300px;" />
+                </div>
             </div>
-            <div>Org Contact:
-                <div id="lblCurContact">Current Organization Contact</div>
-                <input type="text" id="miUpdContact" style="width: 300px;" />
+        <div>&nbsp;</div>
+            <div><strong>Org Contact:</strong>
+                <div id="lblCurContact">
+                    Current Organization Contact
+                    <input type="text" id="miCurContact" style="width: 300px;" />
+                </div>
+                <div id="lblUpdContact">
+                    Updated Organization Contact
+                    <input type="text" id="miUpdContact" style="width: 300px;" />
+                </div>
             </div>
-
+        <div>&nbsp;</div>
+            <div><strong>Image load</strong>
+                <input type="file" id="miUpdInput1" onchange="UpdMIData.loadMIUPDfilename()"/>         
+            </div>
+            <div>ImagePath:
+                <input type="text" id="miUpdTxt1" style="width:300px;" />
+            </div>
+        <div>&nbsp;</div>
+            <div><strong>Campaign Desc:</strong>
+                <div>
+                    Current Campaign Desc
+                    <input type="text" id="miCurCampaignDesc" style="height:25px; width:1457px" />
+                </div>
+                <div>
+                    Updated Campaign Desc
+                    <input type="text" id="miUpdCampaignDesc" style="height:25px; width:1457px" />
+                </div>
+            </div>
+        <div>&nbsp;</div>
+            <div><strong>Verbiage:</strong>
+                <div>
+                    Current Verbiage
+                    <input type="text" id="miCurVerbiage" style="height:25px; width: 1500px;" />
+                </div>
+                <div>
+                    Updated Verbiage
+                    <input type="text" id="miUpdVerbiage" style="height:25px; width: 1500px;" />
+                </div>
+            </div>
+        <div>&nbsp;</div>
+            <div><strong>APPS Sales Agent:</strong>
+                <div>
+                    Current Sales Agent
+                    <input type="text" id="miCurSalesAgent" style="width: 300px;" />
+                </div>
+                <div>
+                    Updated Sales Agent
+                    <input type="text" id="miUpdSalesAgent" style="width: 300px;" />
+                </div>
+            </div>
+        <div>&nbsp;</div>
+            <div><strong>APPS Sales Agent Email:</strong>
+                <div>
+                    Current Sales Agent Email
+                    <input type="text" id="miCurSalesAgenEmail" style="width: 300px;" />
+                </div>
+                <div>
+                    Updated Sales Agent Email
+                    <input type="text" id="miUpdSalesAgenEmail" style="width: 300px;" />
+                </div>
+            </div>
         </div>
 
     </div>

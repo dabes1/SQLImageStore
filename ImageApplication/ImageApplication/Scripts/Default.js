@@ -93,3 +93,23 @@ function LoadToMIDBCallbackSuccess(result) {
     alert("MI Load Successful");
 }
 
+
+
+
+
+UpdMIData = function (){
+    var Public = {
+        loadMIUPDfilename: function () {
+            var eleFile = $("#miUpdInput1");
+
+            var selectedPath = eleFile[0].value;
+            var selectedFile = eleFile[0].files[0];
+
+            $("#miUpdTxt1")[0].value = selectedPath;
+        }
+    };
+
+
+    return Public;
+
+}();
