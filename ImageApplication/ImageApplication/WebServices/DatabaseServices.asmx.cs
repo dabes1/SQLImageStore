@@ -10,6 +10,7 @@ using System.Data.SqlClient;
 using System.IO;
 using System.Configuration;
 using ImgApp.Objects;
+using MerchantIntake.ClassLibrary;
 
 namespace ImageApplication.WebServices
 {
@@ -71,7 +72,7 @@ namespace ImageApplication.WebServices
                             {
 
                                 return _outID;
-                            }                        
+                            }
                         }
                         catch (Exception e)
                         {
@@ -172,7 +173,7 @@ namespace ImageApplication.WebServices
                         }
                         catch (Exception e)
                         {
-                            return null ;
+                            return null;
                         }
                     }
                 }
@@ -182,10 +183,42 @@ namespace ImageApplication.WebServices
                 }
             }
 
-
-
             return inObj;
         }
+
+
+
+        [WebMethod(EnableSession = true)]
+        public ReferringOrganizations GetReferringOrganizations()
+        {
+            ReferringOrganizations oObj = null;
+
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["SiteSqlServer"].ToString()))
+            {
+                try
+                {
+                    con.Open();
+                    using (SqlCommand cmd = new SqlCommand("SELECT ORGANIZATION FROM tblMerchantIntakeReferrer", con))
+                    {
+                        cmd.CommandType = CommandType.Text;
+                        SqlDataReader sdr = cmd.ExecuteReader();
+
+                        if (sdr != null && sdr.HasRows)
+                        {
+                            DataTable dt = new DataTable();
+                            dt.Load(sdr);
+                            oObj = new ReferringOrganizations(dt);
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    return null;
+                }
+            }
+            return oObj;
+        }
+
 
     }
 }

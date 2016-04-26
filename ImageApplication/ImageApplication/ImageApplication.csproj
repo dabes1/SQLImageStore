@@ -76,6 +76,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClassLibrary\FileObj.cs" />
+    <Compile Include="ClassLibrary\MerchantIntakeObjects.cs" />
     <Compile Include="ClassLibrary\MIFileObj.cs" />
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
