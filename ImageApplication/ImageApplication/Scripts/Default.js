@@ -56,12 +56,12 @@ var loadfilename = function () {
 
 
     var loadMIfilename = function () {
-        var eleFile = document.getElementById('miInput1');
+        //var eleFile = document.getElementById('miInput1');
 
-        var selectedPath = eleFile.value;
-        var selectedFile = eleFile.files[0];
+        //var selectedPath = eleFile.value;
+        //var selectedFile = eleFile.files[0];
 
-        document.getElementById('miTxt1').value = selectedPath;
+        document.getElementById('miTxt1').value = document.getElementById('miInput1').value;
 
     }
 
@@ -104,20 +104,15 @@ var loadfilename = function () {
 
     UpdMIData = function () {
 
-        var ddlSelOrgbuffer = null;
-        var ddlSelRefIDbuffer = null;
-
         var Public = {
             LoadReferrringOrganizationsTo_selOrg: function (elem) {
                 elem.style.display = "block;";
                 elem.style.cssText = "display: block;"
 
-                ImageApplication.WebServices.DatabaseServices.GetReferringOrganizations(this.GetReferringOrganizations_selOrgCallbackSuccess)
+                ImageApplication.WebServices.DatabaseServices.GetReferringOrganizations(this.GetReferringOrganizations_CallbackSuccess)
             },
 
-            GetReferringOrganizations_selOrgCallbackSuccess: function (result) {
-                ddlSelOrgbuffer = result.Organizations;
-
+            GetReferringOrganizations_CallbackSuccess: function (result) {
                 var ddlSel = document.getElementById("selOrg");
                 var selectedIdx = 0;
                 var ctr = 0;
@@ -138,18 +133,170 @@ var loadfilename = function () {
                 }
                 ddlSel.selectedIndex = 0;
 
+                ddlSel = undefined;
+                ddlSel = document.getElementById("selRefID");
+                selectedIdx = ctr = option = 0;
+                for (var idx in result.IDs) {
+                    option = document.createElement('option');
+                    option.value = result.IDs[idx];
+                    option.innerText = result.IDs[idx];
+                    ddlSel.appendChild(option);
+                    ctr++;
+                    option = null;
+                }
+                ddlSel.selectedIndex = 0;
+            },
+
+            updSelectedReferringOrganizationNameSelected: function (elem) {
+                document.getElementById("selRefID").selectedIndex = elem.selectedIndex;
+
+                var value = document.getElementById("selRefID")[document.getElementById("selRefID").selectedIndex].value;
+
+                if (value == "Select")
+                    this.GetReferringOrganizationCampaignIDsCallbackSuccess(value);
+
+                ImageApplication.WebServices.DatabaseServices.GetReferringOrganizationCampaignIDs(value, this.GetReferringOrganizationCampaignIDsCallbackSuccess);
+            },
+
+            updSelectedReferringOrganizationIdSelected: function (elem) {
+                document.getElementById("selOrg").selectedIndex = elem.selectedIndex;
+                var value = elem[elem.selectedIndex].value;
+
+                if (value == "Select")
+                    this.GetReferringOrganizationCampaignIDsCallbackSuccess(value);
+
+                ImageApplication.WebServices.DatabaseServices.GetReferringOrganizationCampaignIDs(value, this.GetReferringOrganizationCampaignIDsCallbackSuccess);
+            },
+
+            updSelectedReferringOrganizationCampaignSelected: function (elem) {
+                document.getElementById("btnLoad").disabled = false;
+            },
+
+            GetReferringOrganizationCampaignIDsCallbackSuccess: function (result) {
+                var ddlSel = document.getElementById("selCmpID");
+
+                ddlSel.options.length = 1;
+
+                if (result == "Select")
+                    return;
+
+                var selectedIdx = 0;
+                var ctr = 0;
+                var option;
+                for (var idx in result.CampaignIDs) {
+                    option = document.createElement('option');
+                    option.value = result.CampaignIDs[idx];
+                    option.innerText = result.CampaignIDs[idx];
+                    ddlSel.appendChild(option);
+                    ctr++;
+                    option = null;
+                }
+                ddlSel.selectedIndex = 0;
+            },
+            
+            loadCurrentData: function () {
+                var refID = document.getElementById("selRefID")[document.getElementById("selRefID").selectedIndex].value;
+                var cmpID = document.getElementById("selCmpID")[document.getElementById("selCmpID").selectedIndex].value;
+
+                ImageApplication.WebServices.DatabaseServices.GetReferringOrganziationCurrentInfo(refID, cmpID, this.GetReferringOrganziationCurrentInfoCallbackSuccess);
+            },
+
+            GetReferringOrganziationCurrentInfoCallbackSuccess: function (result) {
+                var curData = result;
+
+                document.getElementById("miCurOrganization").value = result.Organization;
+                document.getElementById("miCurEmail").value = result.Email;
+                document.getElementById("miCurContact").value = result.ContactName;
+                document.getElementById("miCurCampaignDesc").value = result.CampaignDescription;
+                document.getElementById("miCurVerbiage").value = result.Verbiage;
+                document.getElementById("miCurSalesAgent").value = result.APPSalesAgentName;
+                document.getElementById("miCurSalesAgenEmail").value = result.APPSalesAgentEmail;
+                document.getElementById("miCurCCEmailList").value = result.APPccEmailList;
+                document.getElementById("miCurBCCEmailList").value = result.APPbccEmailList;
 
             },
 
-
             loadMIUPDfilename: function () {
-                var eleFile = $("#miUpdInput1");
+                document.getElementById("miUpdTxt1").value = document.getElementById("miUpdInput1").value;
+            },
 
-                var selectedPath = eleFile[0].value;
-                var selectedFile = eleFile[0].files[0];
+            loadUpdatesToMIDB: function () {
+            var fileObj = new Object;
 
-                $("#miUpdTxt1")[0].value = selectedPath;
+            fileObj.ReferrerID = document.getElementById("selRefID")[document.getElementById("selRefID").selectedIndex].value;
+            fileObj.ReferrerCampaignID = document.getElementById("selCmpID")[document.getElementById("selCmpID").selectedIndex].value;
+
+            fileObj.Organization = null;
+            if (document.getElementById('miUpdOrganization').value != "" || document.getElementById('miUpdOrganization').value.length > 0)
+                fileObj.Organization = document.getElementById('miUpdOrganization').value;
+
+            fileObj.Email = null;
+            if (document.getElementById('miUpdEmail').value != "" || document.getElementById('miUpdEmail').value.length > 0)
+                fileObj.Email = document.getElementById('miUpdEmail').value;
+
+            fileObj.Contact = null;
+            if (document.getElementById('miUpdContact').value != "" || document.getElementById('miUpdContact').value.length > 0)
+                fileObj.Contact = document.getElementById('miUpdContact').value;
+
+            fileObj.ImgFile = null;
+            if (document.getElementById('miUpdInput1').files.length > 0)
+                fileObj.ImgFile = document.getElementById('miUpdInput1').files[0].name;
+
+            fileObj.ImgPath = null;
+            if (document.getElementById('miUpdTxt1').value != "" || document.getElementById('miUpdTxt1').value.length > 0)
+                fileObj.ImgPath = document.getElementById('miUpdTxt1').value;
+
+            fileObj.CampaignDescription = null;
+            if (document.getElementById('miUpdCampaignDesc').value != "" || document.getElementById('miUpdCampaignDesc').value.length > 0)
+                fileObj.CampaignDescription = document.getElementById('miUpdCampaignDesc').value;
+
+            fileObj.Verbiage = null;
+            if (document.getElementById('miUpdVerbiage').value != "" || document.getElementById('miUpdVerbiage').value.length > 0)
+                fileObj.Verbiage = document.getElementById('miUpdVerbiage').value;
+
+            fileObj.APPSalesAgentName = null;
+            if (document.getElementById('miUpdSalesAgent').value != "" || document.getElementById('miUpdSalesAgent').value.length > 0)
+                fileObj.APPSalesAgentName = document.getElementById('miUpdSalesAgent').value;
+
+            fileObj.APPSalesAgentEmail = null;
+            if (document.getElementById('miUpdSalesAgenEmail').value != "" || document.getElementById('miUpdSalesAgenEmail').value.length > 0)
+            fileObj.APPSalesAgentEmail = document.getElementById('miUpdSalesAgenEmail').value;
+
+            ImageApplication.WebServices.DatabaseServices.LoadToMIDB(fileObj, this.LoadUpdatesToMIDBCallbackSuccess);
+            },
+
+            LoadUpdatesToMIDBCallbackSuccess: function (result) {
+                alert("Update to Referring Organization Data Successful!!!");
+
+                var ancestor = document.getElementById("divUpdateArea"), descendants = ancestor.getElementsByTagName("*");
+
+                var ctr;
+                var elem;
+                for (var i = 0; i < descendants.length; i++) {
+                    elem = descendants[i];
+                    if (elem.id == "" || elem.id == undefined)
+                        continue;
+                    elem.value = "";
+                }
+
+
+                //this.ClearAllUpdFields();
+            },
+
+            ClearAllUpdFields: function () {
+                var ancestor = document.getElementById("divUpdateArea"), descendants = ancestor.getElementsByTagName("*");
+
+                var ctr;
+                var elem;
+                for (var i = 0; i < descendants.length; i++) {
+                    elem = descendants[i];
+                    if (elem.id == "" || elem.id == undefined)
+                        continue;
+                    elem.value = "";
+                }
+
             }
+
         };
 
 

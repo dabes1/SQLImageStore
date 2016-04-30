@@ -132,11 +132,14 @@ namespace ImageApplication.WebServices
         {
             byte[] imgData = null;
 
-            FileInfo fInfo = new FileInfo(inObj.ImgPath);
-            long numBytes = fInfo.Length;
-            FileStream fStream = new FileStream(inObj.ImgPath, FileMode.Open, FileAccess.Read);
-            BinaryReader bRdr = new BinaryReader(fStream);
-            imgData = bRdr.ReadBytes((int)numBytes);
+            if (!string.IsNullOrEmpty(inObj.ImgPath))
+            {
+                FileInfo fInfo = new FileInfo(inObj.ImgPath);
+                long numBytes = fInfo.Length;
+                FileStream fStream = new FileStream(inObj.ImgPath, FileMode.Open, FileAccess.Read);
+                BinaryReader bRdr = new BinaryReader(fStream);
+                imgData = bRdr.ReadBytes((int)numBytes);
+            }
 
             string conStr = ConfigurationManager.ConnectionStrings["SiteSqlServer"].ToString();
             using (SqlConnection con = new SqlConnection(conStr))
@@ -198,7 +201,7 @@ namespace ImageApplication.WebServices
                 try
                 {
                     con.Open();
-                    using (SqlCommand cmd = new SqlCommand("SELECT ORGANIZATION FROM tblMerchantIntakeReferrer", con))
+                    using (SqlCommand cmd = new SqlCommand("SELECT ID, ORGANIZATION FROM tblMerchantIntakeReferrer", con))
                     {
                         cmd.CommandType = CommandType.Text;
                         SqlDataReader sdr = cmd.ExecuteReader();
@@ -219,6 +222,72 @@ namespace ImageApplication.WebServices
             return oObj;
         }
 
+        [WebMethod(EnableSession = true)]
+        public Campaigns GetReferringOrganizationCampaignIDs(string inRefID)
+        {
+            Campaigns oObj = null;
 
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["SiteSqlServer"].ToString()))
+            {
+                try
+                {
+                    con.Open();
+                    using (SqlCommand cmd = new SqlCommand("proc_MerchantIntakeReferringOrganizationCampaignsGet", con))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@ReferrerID", inRefID);
+                        SqlDataReader sdr = cmd.ExecuteReader();
+
+                        if (sdr != null && sdr.HasRows)
+                        {
+                            DataTable dt = new DataTable();
+                            dt.Load(sdr);
+                            oObj = new Campaigns(dt);
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    return null;
+                }
+            }
+            return oObj;
+
+        }
+
+        [WebMethod(EnableSession = true)]
+        public ReferringOrganizationCampaignCurrentData GetReferringOrganziationCurrentInfo(string inRefID, string inCmpID)
+        {
+            ReferringOrganizationCampaignCurrentData oObj = null;
+
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["SiteSqlServer"].ToString()))
+            {
+                try
+                {
+                    con.Open();
+                    using (SqlCommand cmd = new SqlCommand("proc_MerchantIntakeReferringOrganizationAndCampaignCurrentInfoGet", con))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@ReferrerID", inRefID);
+                        cmd.Parameters.AddWithValue("@ReferrerCampaignID", inCmpID);
+                        SqlDataReader sdr = cmd.ExecuteReader();
+
+                        if (sdr != null && sdr.HasRows)
+                        {
+                            DataTable dt = new DataTable();
+                            dt.Load(sdr);
+                            oObj = new ReferringOrganizationCampaignCurrentData(dt);
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    return null;
+                }
+            }
+
+            return oObj;
+
+        }
     }
 }
