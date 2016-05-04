@@ -89,6 +89,10 @@ var loadfilename = function () {
         fileObj.APPSalesAgentName = document.getElementById('miSalesAgent').value;
         fileObj.APPSalesAgentEmail = document.getElementById('miSalesAgenEmail').value;
 
+        fileObj.Hierarchy = document.getElementById('miUpdHierarchy').value;
+        fileObj.APPccEmailList = document.getElementById('miUpdCCEmailList').value;
+        fileObj.APPbccEmailList = document.getElementById('miUpdBCCEmailList').value;
+
         ImageApplication.WebServices.DatabaseServices.LoadToMIDB(fileObj, LoadToMIDBCallbackSuccess);
     };
 
@@ -205,14 +209,15 @@ var loadfilename = function () {
                 var curData = result;
 
                 document.getElementById("miCurOrganization").value = result.Organization;
-                document.getElementById("miCurEmail").value = result.Email;
-                document.getElementById("miCurContact").value = result.ContactName;
+                document.getElementById("miCurPrimaryContactEmail").value = result.PrimaryContactEmail;
+                document.getElementById("miCurPrimaryContactName").value = result.PrimaryContactName;
                 document.getElementById("miCurCampaignDesc").value = result.CampaignDescription;
                 document.getElementById("miCurVerbiage").value = result.Verbiage;
                 document.getElementById("miCurSalesAgent").value = result.APPSalesAgentName;
                 document.getElementById("miCurSalesAgenEmail").value = result.APPSalesAgentEmail;
                 document.getElementById("miCurCCEmailList").value = result.APPccEmailList;
                 document.getElementById("miCurBCCEmailList").value = result.APPbccEmailList;
+                document.getElementById("miCurHierarchy").value = result.Hierarchy;
 
             },
 
@@ -230,13 +235,13 @@ var loadfilename = function () {
             if (document.getElementById('miUpdOrganization').value != "" || document.getElementById('miUpdOrganization').value.length > 0)
                 fileObj.Organization = document.getElementById('miUpdOrganization').value;
 
-            fileObj.Email = null;
-            if (document.getElementById('miUpdEmail').value != "" || document.getElementById('miUpdEmail').value.length > 0)
-                fileObj.Email = document.getElementById('miUpdEmail').value;
+            fileObj.PrimaryContactEmail = null;
+            if (document.getElementById('miUpdPrimaryContactEmail').value != "" || document.getElementById('miUpdPrimaryContactEmail').value.length > 0)
+                fileObj.PrimaryContactEmail = document.getElementById('miUpdPrimaryContactEmail').value;
 
-            fileObj.Contact = null;
-            if (document.getElementById('miUpdContact').value != "" || document.getElementById('miUpdContact').value.length > 0)
-                fileObj.Contact = document.getElementById('miUpdContact').value;
+            fileObj.PrimaryContactName = null;
+            if (document.getElementById('miUpdPrimaryContactName').value != "" || document.getElementById('miUpdPrimaryContactName').value.length > 0)
+                fileObj.PrimaryContactName = document.getElementById('miUpdPrimaryContactName').value;
 
             fileObj.ImgFile = null;
             if (document.getElementById('miUpdInput1').files.length > 0)
@@ -260,7 +265,19 @@ var loadfilename = function () {
 
             fileObj.APPSalesAgentEmail = null;
             if (document.getElementById('miUpdSalesAgenEmail').value != "" || document.getElementById('miUpdSalesAgenEmail').value.length > 0)
-            fileObj.APPSalesAgentEmail = document.getElementById('miUpdSalesAgenEmail').value;
+                fileObj.APPSalesAgentEmail = document.getElementById('miUpdSalesAgenEmail').value;
+
+            fileObj.APPccEmailList = null;
+            if (document.getElementById('miUpdCCEmailList').value != "" || document.getElementById('miUpdCCEmailList').value.length > 0)
+                fileObj.APPccEmailList = document.getElementById('miUpdCCEmailList').value;          
+
+            fileObj.APPbccEmailList = null;
+            if (document.getElementById('miUpdBCCEmailList').value != "" || document.getElementById('miUpdBCCEmailList').value.length > 0)
+                fileObj.APPbccEmailList = document.getElementById('miUpdBCCEmailList').value;
+
+            fileObj.Hierarchy = null;
+            if (document.getElementById('miUpdHierarchy').value != "" || document.getElementById('miUpdHierarchy').value.length > 0)
+                fileObj.Hierarchy = document.getElementById('miUpdHierarchy').value;
 
             ImageApplication.WebServices.DatabaseServices.LoadToMIDB(fileObj, this.LoadUpdatesToMIDBCallbackSuccess);
             },

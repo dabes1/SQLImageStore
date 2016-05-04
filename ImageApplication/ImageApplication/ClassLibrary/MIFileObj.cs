@@ -9,8 +9,8 @@ namespace ImgApp.Objects
     {
         public string ReferrerID { get; set; }
         public string Organization { get; set; }
-        public string Email { get; set; }
-        public string Contact { get; set; }
+        public string PrimaryContactEmail { get; set; }
+        public string PrimaryContactName { get; set; }
 
         public string ReferrerCampaignID { get; set; }
         public string ImgFile { get; set; }
@@ -20,6 +20,11 @@ namespace ImgApp.Objects
 
         public string APPSalesAgentName { get; set; }
         public string APPSalesAgentEmail { get; set; }
+
+
+        public string Hierarchy { get; set; }
+        public string APPccEmailList { get; set; }
+        public string APPbccEmailList { get; set; }
 
 
         public int oReferrerID { get; set; }

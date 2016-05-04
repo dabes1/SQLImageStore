@@ -155,17 +155,18 @@ namespace ImageApplication.WebServices
 
                         cmd.Parameters.AddWithValue("@ReferrerID", inObj.ReferrerID);           // 0=new referrer organization
                         cmd.Parameters.AddWithValue("@Organization", inObj.Organization);
-                        cmd.Parameters.AddWithValue("@Email", inObj.Email);
-                        cmd.Parameters.AddWithValue("@ContactName", inObj.Contact);
-
+                        cmd.Parameters.AddWithValue("@PrimaryContactEmail", inObj.PrimaryContactEmail);
+                        cmd.Parameters.AddWithValue("@PrimaryContactName", inObj.PrimaryContactName);
                         cmd.Parameters.AddWithValue("@ReferrerCampaignID", inObj.ReferrerCampaignID);
                         cmd.Parameters.AddWithValue("@CampaignImage", imgData);
                         cmd.Parameters.AddWithValue("@CampaignImageDirPath", inObj.ImgPath);
                         cmd.Parameters.AddWithValue("@CampaignDescription", inObj.CampaignDescription);
                         cmd.Parameters.AddWithValue("@Verbiage", inObj.Verbiage);
-
                         cmd.Parameters.AddWithValue("@APPSalesAgentName", inObj.APPSalesAgentName);
                         cmd.Parameters.AddWithValue("@APPSalesAgentEmail", inObj.APPSalesAgentEmail);
+                        cmd.Parameters.AddWithValue("@APPccEmailList", inObj.APPccEmailList);
+                        cmd.Parameters.AddWithValue("@APPbccEmailList", inObj.APPbccEmailList);
+                        cmd.Parameters.AddWithValue("@HierarchyID", inObj.Hierarchy);
 
                         cmd.Parameters.Add("@oRefID", SqlDbType.Int).Direction = System.Data.ParameterDirection.Output;
 

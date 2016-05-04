@@ -67,7 +67,7 @@
                 <hr />
 
                 <div>Campaign ID (DO NOT ENTER 0 AND DO NOT LEAVE BLANK):
-                    <input type="text" id="miCampaignID" style="width:50px" />
+                    <input type="text" id="miCampaignID" style="width:50px" value="1" />
                     
                 </div>
                 <div>Image load
@@ -82,17 +82,24 @@
                 <div>Verbiage:
                     <input type="text" id="miVerbiage" style="height:25px; width: 1500px;" />
                 </div>
-            </div>
-
-            <div>
                 <div>APPS Sales Agent:
                     <input type="text" id="miSalesAgent" style="width: 300px;" />
                 </div>
-
                 <div>APPS Sales Agent Email:
                     <input type="text" id="miSalesAgenEmail" style="width: 300px;" />
                 </div>
-
+                <div>
+                    APPS cc email list
+                    <input type="text" id="miCCEmailList" style="width: 300px;" />
+                </div>
+                <div>
+                    APPS bcc email list
+                    <input type="text" id="miBCCEmailList" style="width: 300px;" />
+                </div>
+                <div>
+                    Hierarchy Parent Organization ID (Only enter the ID of the parent organization)
+                    <input type="text" id="miHierarchy" style="width: 300px;" />
+                </div>
             </div>
 
 
@@ -162,22 +169,22 @@
                     <div><strong>Email:</strong>
                         <div id="lblCurEmail">
                             Current Email
-                            <input type="text" id="miCurEmail" style="width: 300px;" />
+                            <input type="text" id="miCurPrimaryContactEmail" style="width: 300px;" />
                         </div>
                         <div id="lblUpdEmail">
                             Updated Email
-                            <input type="text" id="miUpdEmail" style="width: 300px;" />
+                            <input type="text" id="miUpdPrimaryContactEmail" style="width: 300px;" />
                         </div>
                     </div>
                     <div>&nbsp;</div>
                     <div><strong>Org Contact:</strong>
                         <div id="lblCurContact">
                             Current Organization Contact
-                            <input type="text" id="miCurContact" style="width: 300px;" />
+                            <input type="text" id="miCurPrimaryContactName" style="width: 300px;" />
                         </div>
                         <div id="lblUpdContact">
                             Updated Organization Contact
-                            <input type="text" id="miUpdContact" style="width: 300px;" />
+                            <input type="text" id="miUpdPrimaryContactName" style="width: 300px;" />
                         </div>
                     </div>
                     <div>&nbsp;</div>
@@ -253,9 +260,18 @@
                             <input type="text" id="miUpdBCCEmailList" style="width: 300px;" />
                         </div>
                     </div>
+                    <div>&nbsp;</div>
+                    <div><strong>Hierarchy:</strong>(Hierarchy is defined at the Referring Organization Level, NOT BY CAMPAIGN LEVEL)
+                        <div>
+                            Current Parent Organization ID
+                            <input type="text" id="miCurHierarchy" style="width: 300px;" />
+                        </div>
+                        <div>
+                            Updated Parent Organization ID (only enter the ID of the parent organization)
+                            <input type="text" id="miUpdHierarchy" style="width: 300px;" />
+                        </div>
+                    </div>
                 </div>
-
-
 
                 <input type="button" id="btnUpd" style="height:25px; width:100px" value="Update Values" onclick="UpdMIData.loadUpdatesToMIDB();" />
             </div>
