@@ -74,8 +74,8 @@ var loadfilename = function () {
             fileObj.ReferrerID = document.getElementById('miReferrerID').value;
 
         fileObj.Organization = document.getElementById('miOrganization').value;
-        fileObj.Email = document.getElementById('miEmail').value;
-        fileObj.Contact = document.getElementById('miContact').value;
+        fileObj.PrimaryContactEmail = document.getElementById('miEmail').value;
+        fileObj.PrimaryContactName = document.getElementById('miContact').value;
 
         fileObj.ReferrerCampaignID = 0;
         if (document.getElementById('miCampaignID').value != "" && document.getElementById('miCampaignID').value != undefined)
@@ -89,9 +89,9 @@ var loadfilename = function () {
         fileObj.APPSalesAgentName = document.getElementById('miSalesAgent').value;
         fileObj.APPSalesAgentEmail = document.getElementById('miSalesAgenEmail').value;
 
-        fileObj.Hierarchy = document.getElementById('miUpdHierarchy').value;
-        fileObj.APPccEmailList = document.getElementById('miUpdCCEmailList').value;
-        fileObj.APPbccEmailList = document.getElementById('miUpdBCCEmailList').value;
+        fileObj.Hierarchy = document.getElementById('miHierarchy').value;
+        fileObj.APPccEmailList = document.getElementById('miCCEmailList').value;
+        fileObj.APPbccEmailList = document.getElementById('miBCCEmailList').value;
 
         ImageApplication.WebServices.DatabaseServices.LoadToMIDB(fileObj, LoadToMIDBCallbackSuccess);
     };
